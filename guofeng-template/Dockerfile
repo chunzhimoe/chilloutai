@@ -6,11 +6,17 @@ ENV PATH="${PATH}:/workspace/stable-diffusion-webui/venv/bin"
 
 WORKDIR /
 
+# 下载模型文件
+ADD ./models/download.sh /workspace/stable-diffusion-webui/models/download.sh
+RUN chmod +x /workspace/stable-diffusion-webui/models/download.sh && \
+    cd /workspace/stable-diffusion-webui/models && \
+    ./download.sh && \
+    rm download.sh
+
 RUN rm /workspace/v1-5-pruned-emaonly.ckpt
 
 ADD ./models/basemodel.safetensors /workspace/stable-diffusion-webui/models/Stable-diffusion/basemodel.safetensors
 ADD ./models/Lora/ /workspace/stable-diffusion-webui/models/Lora/
-
 
 ADD relauncher.py .
 ADD webui-user.sh .
