@@ -23,8 +23,8 @@ jobs:
     - name: Build and push Docker image
       uses: docker/build-push-action@v3
       with:
-        context: guofeng-template
-        dockerfile: guofeng-template/Dockerfile
+        context: mix
+        dockerfile: chilloutmix-template/Dockerfile
         push: true
         tags: |
           chundfgd/guo:latest
