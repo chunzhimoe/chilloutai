@@ -18,8 +18,6 @@ RUN apk add --no-cache wget && \
     wget -q -O /workspace/stable-diffusion-webui/models/Lora/taiwan.safetensors https://civitai.com/api/download/models/52974?type=Model&format=SafeTensor && \
     wget -q -O /workspace/stable-diffusion-webui/models/Lora/zhongguo.safetensors https://civitai.com/api/download/models/66172?type=Model&format=SafeTensor 
 
-ADD ./models/checkpoint/chilloutmix.safetensors /workspace/stable-diffusion-webui/models/Stable-diffusion/chilloutmix.safetensors
-ADD ./models/Lora/ /workspace/stable-diffusion-webui/models/Lora/
 
 RUN pip install -U xformers
 RUN pip install runpod
