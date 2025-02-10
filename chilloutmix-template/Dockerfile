@@ -21,11 +21,14 @@ RUN apk add --no-cache wget && \
 ADD ./models/checkpoint/chilloutmix.safetensors /workspace/stable-diffusion-webui/models/Stable-diffusion/chilloutmix.safetensors
 ADD ./models/Lora/ /workspace/stable-diffusion-webui/models/Lora/
 
+RUN pip install -U xformers
+RUN pip install runpod
 
-ADD relauncher.py .
-ADD webui-user.sh .
+ADD webui.py /workspace/stable-diffusion-webui/webui.py
+ADD handler.py .
 ADD start.sh /start.sh
-RUN chmod a+x /start.sh
+RUN chmod +x /start.sh
+
 
 SHELL ["/bin/bash", "--login", "-c"]
 CMD [ "/start.sh" ]
