@@ -1,42 +1,31 @@
-name: Build and Push Docker Image
+name: ci
+
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches:
+      - "main"
 
 jobs:
-  build:
-    name: Build my artifact
+  docker:
     runs-on: ubuntu-latest
     steps:
-      - name: Maximize build space
-        uses: easimon/maximize-build-space@master
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
         with:
-          root-reserve-mb: 512
-          swap-size-mb: 1024
-          remove-dotnet: 'true'
-
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Build
-        run: |
-          echo "Free space:"
-          df -h
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
+          username: ${{ vars.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PAT }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v3
+          driver: cloud
+          endpoint: "chunzhi233233/chilluomix"
+          install: true
+      - name: Build and push
+        uses: docker/build-push-action@v6
         with:
-          context: chilloutmix-template
-          dockerfile: chilloutmix-template/Dockerfile
-          push: true
-          tags: |
-            chundfgd/guo:latest
-            chundfgd/guo:${{ github.sha }}
+          context: ./chilloutmix-template    # 指定Dockerfile所在的目录
+          push: true                         # 确保推送到registry
+          tags: "${{ vars.DOCKER_USER }}/docker-build-cloud-demo:latest"
+          outputs: ${{ github.event_name == 'pull_request' && 'type=cacheonly' || 'type=registry' }}
