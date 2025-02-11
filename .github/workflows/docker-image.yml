@@ -27,5 +27,5 @@ jobs:
         with:
           context: ./chilloutmix-template    # 指定Dockerfile所在的目录
           push: true                         # 确保推送到registry
-          tags: "${{ vars.DOCKER_USER }}/docker-build-cloud-demo:latest"
+          tags: "${{ secrets.DOCKERHUB_USERNAME }}/chilluomix:latest"
           outputs: ${{ github.event_name == 'pull_request' && 'type=cacheonly' || 'type=registry' }}
